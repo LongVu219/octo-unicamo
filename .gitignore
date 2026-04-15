@@ -160,9 +160,15 @@ cython_debug/
 #.idea/
 
 .ipynb_checkpoints/
-wandb
+wandb/
 *.png
 *.sif
 .vscode
 .idea
 datasets/debug_dataset/bridge_dataset/1.0.0/action_*
+
+# Large data / model artifacts
+checkpoints/
+/data/
+*.tfrecord*
+*.msgpack

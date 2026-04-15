@@ -534,8 +534,8 @@ class WandBFigure:
 
     def __exit__(self, exc_type, exc_value, traceback):
         self.canvas.draw()
-        out_image = np.frombuffer(self.canvas.tostring_rgb(), dtype="uint8")
-        self.image = out_image.reshape(self.fig.canvas.get_width_height()[::-1] + (3,))
+        out_image = np.asarray(self.canvas.buffer_rgba(), dtype="uint8")
+        self.image = out_image.reshape(self.fig.canvas.get_width_height()[::-1] + (4,))[:, :, :3]
         plt.close(self.fig)
 
 

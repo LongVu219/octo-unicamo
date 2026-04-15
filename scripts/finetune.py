@@ -204,8 +204,11 @@ def main(_):
         rng=init_rng,
         dataset_statistics=dataset.dataset_statistics,
     )
-    merged_params = merge_params(model.params, pretrained_model.params)
-    model = model.replace(params=merged_params)
+    if getattr(FLAGS.config, "skip_merge_pretrained", False):
+        logging.info("skip_merge_pretrained=True: training from scratch (random init)")
+    else:
+        merged_params = merge_params(model.params, pretrained_model.params)
+        model = model.replace(params=merged_params)
     del pretrained_model
 
     #########
@@ -378,6 +381,13 @@ def main(_):
 
     def wandb_log(info, step):
         wandb.log(flatten_dict(info, sep="/"), step=step)
+
+    # Eval at step 0 to measure pretrained model baseline
+    logging.info("Evaluating at step 0 (pretrained baseline)...")
+    val_metrics = val_callback(train_state, 0)
+    wandb_log(val_metrics, step=0)
+    viz_metrics = viz_callback(train_state, 0)
+    wandb_log(viz_metrics, step=0)
 
     timer = Timer()
     for i in tqdm.tqdm(

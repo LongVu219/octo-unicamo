@@ -64,6 +64,30 @@ OXE_DATASET_CONFIGS = {
         "state_encoding": StateEncoding.POS_EULER,
         "action_encoding": ActionEncoding.EEF_POS,
     },
+    # BridgeV2 3K subset for training from scratch (single primary camera)
+    "bridge3k_dataset": {
+        "image_obs_keys": {"primary": "image_0", "secondary": None, "wrist": None},
+        "depth_obs_keys": {"primary": None, "secondary": None, "wrist": None},
+        "state_obs_keys": ["EEF_state", None, "gripper_state"],
+        "state_encoding": StateEncoding.POS_EULER,
+        "action_encoding": ActionEncoding.EEF_POS,
+    },
+    # BridgeV2 5K subset for training from scratch (single primary camera)
+    "bridge5k_dataset": {
+        "image_obs_keys": {"primary": "image_0", "secondary": None, "wrist": None},
+        "depth_obs_keys": {"primary": None, "secondary": None, "wrist": None},
+        "state_obs_keys": ["EEF_state", None, "gripper_state"],
+        "state_encoding": StateEncoding.POS_EULER,
+        "action_encoding": ActionEncoding.EEF_POS,
+    },
+    # BridgeV2 10K subset (5K+5K) for training from scratch (single primary camera)
+    "bridge10k_dataset": {
+        "image_obs_keys": {"primary": "image_0", "secondary": None, "wrist": None},
+        "depth_obs_keys": {"primary": None, "secondary": None, "wrist": None},
+        "state_obs_keys": ["EEF_state", None, "gripper_state"],
+        "state_encoding": StateEncoding.POS_EULER,
+        "action_encoding": ActionEncoding.EEF_POS,
+    },
     "taco_play": {
         "image_obs_keys": {
             "primary": "rgb_static",
