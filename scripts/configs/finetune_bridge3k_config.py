@@ -32,6 +32,7 @@ def get_config(config_string="full,language_conditioned"):
         "language_key": "language_instruction",
         "action_proprio_normalization_type": "normal",
         "absolute_action_mask": [False, False, False, False, False, False, True],
+        "action_normalization_mask": [True, True, True, True, True, True, False],
         "standardize_fn": "octo/data/oxe/oxe_standardization_transforms.py:bridge3k_dataset_transform",
     }
 

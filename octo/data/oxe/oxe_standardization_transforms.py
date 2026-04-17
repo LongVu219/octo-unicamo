@@ -25,7 +25,14 @@ from octo.data.utils.data_utils import (
 
 
 def bridge3k_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
-    """Transform for BridgeV2 3K subset. Actions and state are already 7-dim."""
+    trajectory["action"] = tf.concat(
+        [
+            trajectory["action"][:, :6],
+            binarize_gripper_actions(trajectory["action"][:, -1])[:, None],
+        ],
+        axis=1,
+    )
+    trajectory = relabel_actions(trajectory)
     trajectory["observation"]["EEF_state"] = trajectory["observation"]["state"][:, :6]
     trajectory["observation"]["gripper_state"] = trajectory["observation"]["state"][
         :, -1:
@@ -34,7 +41,14 @@ def bridge3k_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def bridge5k_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
-    """Transform for BridgeV2 5K subset. Actions and state are already 7-dim."""
+    trajectory["action"] = tf.concat(
+        [
+            trajectory["action"][:, :6],
+            binarize_gripper_actions(trajectory["action"][:, -1])[:, None],
+        ],
+        axis=1,
+    )
+    trajectory = relabel_actions(trajectory)
     trajectory["observation"]["EEF_state"] = trajectory["observation"]["state"][:, :6]
     trajectory["observation"]["gripper_state"] = trajectory["observation"]["state"][
         :, -1:
@@ -43,7 +57,14 @@ def bridge5k_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def bridge10k_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
-    """Transform for BridgeV2 10K subset. Actions and state are already 7-dim."""
+    trajectory["action"] = tf.concat(
+        [
+            trajectory["action"][:, :6],
+            binarize_gripper_actions(trajectory["action"][:, -1])[:, None],
+        ],
+        axis=1,
+    )
+    trajectory = relabel_actions(trajectory)
     trajectory["observation"]["EEF_state"] = trajectory["observation"]["state"][:, :6]
     trajectory["observation"]["gripper_state"] = trajectory["observation"]["state"][
         :, -1:
