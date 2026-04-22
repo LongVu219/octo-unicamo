@@ -1,15 +1,15 @@
 """
-Config for finetuning pretrained Octo-small on BridgeV2 10K subset.
+Config for finetuning pretrained Octo-small on synthetic 1K subset (sim_1k_1).
 
 Usage:
     conda activate octo
     cd /prj/corp/airesearch/lasvegas/vol5-scratch/users/phongnh/Long/octo
 
     python scripts/finetune.py \
-        --config scripts/configs/finetune_bridge10k_config.py:full,language_conditioned \
+        --config scripts/configs/finetune_sim1k_config.py:full,language_conditioned \
         --config.pretrained_path=hf://rail-berkeley/octo-small \
-        --config.save_dir=checkpoints/bridge10k_finetune \
-        --config.wandb.project=octo_bridge10k \
+        --config.save_dir=checkpoints/sim1k_finetune \
+        --config.wandb.project=octo_sim1k \
         --config.wandb.group=finetune
 """
 
@@ -23,7 +23,7 @@ def get_config(config_string="full,language_conditioned"):
     assert mode in ["full", "head_only", "head_mlp_only"]
 
     FINETUNING_KWARGS = {
-        "name": "bridge10k_dataset",
+        "name": "sim1k_dataset",
         "data_dir": "/prj/corp/airesearch/lasvegas/vol5-scratch/users/phongnh/Long/octo/data",
         "image_obs_keys": {"primary": "image_0", "wrist": None},
         "state_obs_keys": ["EEF_state", None, "gripper_state"],
@@ -31,27 +31,27 @@ def get_config(config_string="full,language_conditioned"):
         "action_proprio_normalization_type": "normal",
         "absolute_action_mask": [False, False, False, False, False, False, True],
         "action_normalization_mask": [True, True, True, True, True, True, False],
-        "standardize_fn": "octo/data/oxe/oxe_standardization_transforms.py:bridge10k_dataset_transform",
+        "standardize_fn": "octo/data/oxe/oxe_standardization_transforms.py:sim1k_dataset_transform",
     }
 
     frozen_keys = None
 
-    max_steps = FieldReference(50000)
+    max_steps = FieldReference(20000)
     window_size = FieldReference(default=1)
 
     config = dict(
         pretrained_path=placeholder(str),
         pretrained_step=placeholder(int),
         batch_size=128,
-        shuffle_buffer_size=20000,
+        shuffle_buffer_size=10000,
         num_steps=max_steps,
         log_interval=100,
-        eval_interval=1000,
-        save_interval=5000,
+        eval_interval=500,
+        save_interval=2000,
         save_dir=placeholder(str),
         seed=42,
         wandb=dict(
-            project="octo_bridge10k", group=placeholder(str), entity=placeholder(str)
+            project="octo_sim1k", group=placeholder(str), entity=placeholder(str)
         ),
         dataset_kwargs=FINETUNING_KWARGS,
         modality=task,
@@ -62,7 +62,7 @@ def get_config(config_string="full,language_conditioned"):
             learning_rate=dict(
                 name="cosine",
                 init_value=0.0,
-                peak_value=3e-5,
+                peak_value=1e-5,
                 warmup_steps=2000,
                 decay_steps=max_steps,
                 end_value=0.0,

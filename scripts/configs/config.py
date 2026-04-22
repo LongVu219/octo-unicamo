@@ -67,7 +67,7 @@ def get_config(
                 learning_rate=dict(
                     name="rsqrt",
                     init_value=0.0,
-                    peak_value=3e-4,
+                    peak_value=5e-5,
                     warmup_steps=2000,
                     timescale=10000,
                 ),
@@ -102,9 +102,9 @@ def get_config(
             wandb_resume_id=placeholder(str),
             eval_datasets=(
                 "bridge_dataset",
-                "taco_play",
-                "berkeley_cable_routing",
-                "berkeley_autolab_ur5",
+                # "taco_play",
+                # "berkeley_cable_routing",
+                # "berkeley_autolab_ur5",
             ),
         )
     )

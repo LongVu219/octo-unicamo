@@ -389,6 +389,11 @@ def main(_):
     viz_metrics = viz_callback(train_state, 0)
     wandb_log(viz_metrics, step=0)
 
+    # Save init checkpoint at step 0 before any training
+    if save_dir is not None:
+        logging.info("Saving initial checkpoint (step 0)...")
+        save_callback(train_state, 0)
+
     timer = Timer()
     for i in tqdm.tqdm(
         range(0, int(FLAGS.config.num_steps)),

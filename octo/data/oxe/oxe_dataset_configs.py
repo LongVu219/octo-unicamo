@@ -88,6 +88,22 @@ OXE_DATASET_CONFIGS = {
         "state_encoding": StateEncoding.POS_EULER,
         "action_encoding": ActionEncoding.EEF_POS,
     },
+    # Synthetic 10K subset (sim_5k_1 + sim_5k_2) for training (single primary camera)
+    "sim10k_dataset": {
+        "image_obs_keys": {"primary": "image_0", "secondary": None, "wrist": None},
+        "depth_obs_keys": {"primary": None, "secondary": None, "wrist": None},
+        "state_obs_keys": ["EEF_state", None, "gripper_state"],
+        "state_encoding": StateEncoding.POS_EULER,
+        "action_encoding": ActionEncoding.EEF_POS,
+    },
+    # Synthetic 1K subset (sim_1k_1) for training (single primary camera)
+    "sim1k_dataset": {
+        "image_obs_keys": {"primary": "image_0", "secondary": None, "wrist": None},
+        "depth_obs_keys": {"primary": None, "secondary": None, "wrist": None},
+        "state_obs_keys": ["EEF_state", None, "gripper_state"],
+        "state_encoding": StateEncoding.POS_EULER,
+        "action_encoding": ActionEncoding.EEF_POS,
+    },
     "taco_play": {
         "image_obs_keys": {
             "primary": "rgb_static",
