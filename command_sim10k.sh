@@ -25,3 +25,7 @@ python scripts/finetune.py \
     --config.save_dir=checkpoints/sim10k_finetune_debug \
     --config.wandb.project=octo_sim10k_debug \
     --config.wandb.group=finetune
+    
+    
+    
+  

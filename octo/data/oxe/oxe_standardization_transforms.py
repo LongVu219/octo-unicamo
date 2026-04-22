@@ -73,6 +73,11 @@ def bridge10k_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def sim10k_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
+    # Binarize gripper only; do NOT call relabel_actions.
+    # The raw actions are already denormalized state-delta predictions from the
+    # pretrained model. relabel_actions would recompute deltas via euler angle
+    # subtraction, which is broken near gimbal lock (pitch ≈ π/2 in this task)
+    # and produces 30x-inflated rotation deltas.
     trajectory["action"] = tf.concat(
         [
             trajectory["action"][:, :6],
@@ -80,7 +85,6 @@ def sim10k_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
         ],
         axis=1,
     )
-    trajectory = relabel_actions(trajectory)
     trajectory["observation"]["EEF_state"] = trajectory["observation"]["state"][:, :6]
     trajectory["observation"]["gripper_state"] = trajectory["observation"]["state"][
         :, -1:
@@ -89,6 +93,7 @@ def sim10k_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
 
 
 def sim1k_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
+    # Same fix as sim10k: no relabel_actions due to gimbal lock in euler states
     trajectory["action"] = tf.concat(
         [
             trajectory["action"][:, :6],
@@ -96,7 +101,6 @@ def sim1k_dataset_transform(trajectory: Dict[str, Any]) -> Dict[str, Any]:
         ],
         axis=1,
     )
-    trajectory = relabel_actions(trajectory)
     trajectory["observation"]["EEF_state"] = trajectory["observation"]["state"][:, :6]
     trajectory["observation"]["gripper_state"] = trajectory["observation"]["state"][
         :, -1:
